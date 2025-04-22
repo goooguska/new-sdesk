@@ -1,0 +1,13 @@
+services:
+    frontend-app:
+        build:
+            context: .
+            dockerfile: docker/Dockerfile
+        ports:
+            - "3000:80" 
+        networks:
+            - app-network
+
+networks:
+    app-network:
+        driver: bridge
