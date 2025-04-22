@@ -1,7 +1,7 @@
 BACKEND_DOCKER_COMPOSE = backend/docker-compose.yml
 FRONTEND_DOCKER_COMPOSE = frontend/docker-compose.yml
 
-DOCKER_COMPOSE = docker-compose -f
+DOCKER_COMPOSE = docker compose -f
 
 .PHONY: build backend-setup frontend-setup up down restart
 
