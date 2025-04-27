@@ -12,7 +12,8 @@ class RoleSeeder extends Seeder
     {
         foreach ($this->roles() as $role) {
             Role::factory()->create([
-                'name' => $role,
+                'name' => $role['name'],
+                'code' => $role['code'],
             ]);
         }
     }
@@ -20,8 +21,14 @@ class RoleSeeder extends Seeder
     private function roles(): array
     {
         return [
-            'Руководитель',
-            'Сотрудник',
+            [
+                'name' => 'Руководитель',
+                'code' => 'admin',
+            ],
+            [
+                'name' => 'Сотрудник',
+                'code' => 'user',
+            ]
         ];
     }
 }

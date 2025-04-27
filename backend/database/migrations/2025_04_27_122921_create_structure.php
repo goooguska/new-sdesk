@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('code');
             $table->timestamps();
         });
 
@@ -43,8 +44,8 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
 
-            $table->unsignedBigInteger('assignee_id');
-            $table->foreign('assignee_id')->references('id')->on('users');
+            $table->unsignedBigInteger('assigned_id');
+            $table->foreign('assigned_id')->references('id')->on('users');
 
             $table->unsignedBigInteger('creator_id');
             $table->foreign('creator_id')->references('id')->on('users');
