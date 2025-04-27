@@ -22,4 +22,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 /** @var Router $router */
 $router->group(['prefix' => 'auth', 'namespace' => 'App\Http\Controllers\Api\Auth'], function (Router $router) {
     $router->post('/login', 'AuthController@login')->middleware('guest');
+    $router->post('/2fa', 'AuthController@confirmTwoFactor')->middleware('guest');
 });

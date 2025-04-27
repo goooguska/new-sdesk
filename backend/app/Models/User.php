@@ -3,11 +3,13 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\TwoFactorAuthentication;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
@@ -17,6 +19,9 @@ use Laravel\Sanctum\HasApiTokens;
  * @property string|null $login
  * @property string|null $password
  * @property Role|null $role
+ * @property int|null two_factor_code
+ * @property Carbon|null two_factor_expires_at
+ *
  */
 class User extends Authenticatable
 {
@@ -34,6 +39,9 @@ class User extends Authenticatable
         'password',
 
         'role_id',
+
+        'two_factor_code',
+        'two_factor_expires_at',
     ];
 
     /**
@@ -53,6 +61,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'two_factor_expires_at' => 'datetime',
         'password' => 'hashed',
     ];
 
