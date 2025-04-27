@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Contracts\Mailer as MailerContract;
 use App\Contracts\Repositories\BaseRepository as BaseRepositoryContract;
 use App\Contracts\Repositories\UserRepository as UserRepositoryContract;
 use App\Contracts\Services\UserService as UserServiceContract;
+use App\Mail\Mailer;
 use App\Repositories\BaseRepository;
 use App\Repositories\UserRepository;
 use App\Services\UserService;
@@ -14,6 +16,7 @@ class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
+        $this->registerUtils();
         $this->registerRepositories();
         $this->registerServices();
     }
@@ -41,6 +44,14 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             UserServiceContract::class,
             UserService::class
+        );
+    }
+
+    private function registerUtils(): void
+    {
+        $this->app->bind(
+            MailerContract::class,
+            Mailer::class
         );
     }
 }

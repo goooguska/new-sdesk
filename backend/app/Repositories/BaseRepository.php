@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Contracts\Repositories\BaseRepository as BaseRepositoryContract;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
@@ -26,6 +27,15 @@ abstract class BaseRepository implements BaseRepositoryContract
         return $this->model->find($id);
     }
 
+    public function save(Model $model): Model
+    {
+        if (! $model->save()) {
+            throw new \RuntimeException('Failed to save user');
+        }
+
+        return $model->refresh();
+    }
+
     public function create(array $fields): Model
     {
         return $this->model->create($fields);
@@ -38,6 +48,6 @@ abstract class BaseRepository implements BaseRepositoryContract
 
     public function delete(int $id): bool
     {
-        return $this->findById($id)->delete();
+        return $this->getById($id)->delete();
     }
 }

@@ -17,7 +17,7 @@ class LoginRequest extends FormRequest
                 'required',
                 'string',
                 'min:8',
-//                'regex:/^(?=.*[A-ZА-Я])(?=.*[\W_]).+$/u'
+                'regex:/^(?=.*[A-ZА-Я])(?=.*[\W_]).+$/u'
             ],
         ];
     }

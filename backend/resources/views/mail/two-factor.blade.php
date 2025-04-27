@@ -1,6 +1,6 @@
 @component('mail::layout')
     @slot('header')
-        @component('mail::header', ['url' => config('app.url')])
+        @component('mail::header', ['url' => config('app.frontend_url')])
             {{ config('app.name') }}
         @endcomponent
     @endslot
@@ -11,12 +11,16 @@
 
     **Срок действия:** {{ $expireMinutes }} минут
 
-    @component('mail::button', ['url' => '#', 'color' => 'primary'])
-        Войти в систему
+    @component('mail::button', [
+        'url' => config('app.frontend_url') . '/auth/2fa?email=' . urlencode($email),
+        'color' => 'primary'
+    ])
+        Перейти к подтверждению
     @endcomponent
 
     @component('mail::panel')
-        Если вы не запрашивали этот код, проигнорируйте это письмо.
+        Если вы не запрашивали этот код, проигнорируйте это письмо.<br>
+        IP адрес входа: {{ $ipAddress ?? request()->ip() }}
     @endcomponent
 
     @slot('footer')

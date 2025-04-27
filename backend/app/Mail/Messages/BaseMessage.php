@@ -13,7 +13,7 @@ abstract class BaseMessage extends Mailable
 
     public function build(): self
     {
-        return $this->view('mail.message')->with($this->getWith());
+        return $this->markdown('mail.message')->with($this->getWith());
     }
 
     protected function getWith(): array

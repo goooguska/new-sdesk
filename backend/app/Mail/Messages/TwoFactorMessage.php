@@ -5,7 +5,8 @@ namespace App\Mail\Messages;
 class TwoFactorMessage extends BaseMessage
 {
     public function __construct(
-        private readonly string $code
+        private readonly string $code,
+        private readonly string $email
     )
     {
         parent::__construct();
@@ -15,7 +16,7 @@ class TwoFactorMessage extends BaseMessage
 
     public function build(): BaseMessage
     {
-        return $this->view('mail.two-factor')->with($this->getWith());
+        return $this->markdown('mail.two-factor')->with($this->getWith());
     }
 
     protected function getWith(): array
@@ -24,6 +25,7 @@ class TwoFactorMessage extends BaseMessage
 
         return [
             'code' => $this->code,
+            'email' => $this->email,
             'expireMinutes' => $expireMinutes,
         ];
     }

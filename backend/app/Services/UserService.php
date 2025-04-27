@@ -30,6 +30,9 @@ class UserService implements UserServiceContract
         ], 202);
     }
 
+    /**
+     * @throws TwoFactorException
+     */
     public function confirmTwoFactor(string $email, string $code): User
     {
         $user = $this->userRepository->getByEmail($email);
@@ -72,7 +75,7 @@ class UserService implements UserServiceContract
         $user = $this->userRepository->getByEmail($credentials['email']);
 
         if ($user === null || !Hash::check($credentials['password'], $user->password)) {
-            throw new \DomainException('Invalid credentials', 401);
+            throw new \DomainException('Данные неверны, проверьте пароль или почту', 401);
         }
 
         return $user;
@@ -90,7 +93,7 @@ class UserService implements UserServiceContract
 
         $this->mailer->sendToQueue(
             $user->email,
-            new TwoFactorMessage($code)
+            new TwoFactorMessage($code, $user->email)
         );
     }
 

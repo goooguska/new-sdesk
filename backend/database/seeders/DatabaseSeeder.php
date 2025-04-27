@@ -32,7 +32,7 @@ class DatabaseSeeder extends Seeder
             'full_name' => 'Test User',
             'email' => 'test@example.com',
             'login' => 'test',
-            'password' => Hash::make('password'),
+            'password' => Hash::make('Test1234!'),
             'role_id' => $roleId
         ]);
     }
