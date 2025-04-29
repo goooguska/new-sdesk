@@ -9,8 +9,9 @@ use App\Exceptions\Auth\TwoFactorException;
 use App\Mail\Messages\TwoFactorMessage;
 use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
+
+use Illuminate\Support\Facades\Log;
 
 class UserService implements UserServiceContract
 {
@@ -19,15 +20,11 @@ class UserService implements UserServiceContract
         private readonly Mailer $mailer
     ) {}
 
-    public function initTwoFactor(array $credentials): JsonResponse
+    public function initTwoFactor(array $credentials): bool
     {
         $user = $this->authenticateUser($credentials);
-        $this->sendTwoFactorCode($user);
 
-        return response()->json([
-            'message' => 'Двухфакторный код отправлен',
-            'expires_in' => config('auth.two_factor.expire', 300)
-        ], 202);
+        return $this->sendTwoFactorCode($user);
     }
 
     /**
@@ -81,20 +78,28 @@ class UserService implements UserServiceContract
         return $user;
     }
 
-    private function sendTwoFactorCode(User $user): void
+    private function sendTwoFactorCode(User $user): bool
     {
-        $code = $this->generateTwoFactorCode();
-        $user->two_factor_code = $code;
-        $user->two_factor_expires_at = Carbon::now()->addMinutes(
-            config('auth.two_factor.expire', 300)
-        );
+        try {
+            $code = $this->generateTwoFactorCode();
+            $user->two_factor_code = $code;
+            $user->two_factor_expires_at = Carbon::now()->addMinutes(
+                config('auth.two_factor.expire', 300)
+            );
 
-        $this->userRepository->save($user);
+            $this->userRepository->save($user);
 
-        $this->mailer->sendToQueue(
-            $user->email,
-            new TwoFactorMessage($code, $user->email)
-        );
+            $this->mailer->sendToQueue(
+                $user->email,
+                new TwoFactorMessage($code, $user->email)
+            );
+
+            return true;
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+
+            return false;
+        }
     }
 
     private function generateTwoFactorCode(): string

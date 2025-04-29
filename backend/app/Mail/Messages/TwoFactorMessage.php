@@ -24,6 +24,7 @@ class TwoFactorMessage extends BaseMessage
         $expireMinutes = config('auth.two_factor.expire', 300) / 60;
 
         return [
+            'title' => $this->subject,
             'code' => $this->code,
             'email' => $this->email,
             'expireMinutes' => $expireMinutes,

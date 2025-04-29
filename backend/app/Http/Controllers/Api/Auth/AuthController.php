@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Auth\AuthUserPresenter;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\TwoFactorRequest;
+use Illuminate\Http\JsonResponse;
 
 class AuthController extends Controller
 {
@@ -17,9 +18,15 @@ class AuthController extends Controller
     )
     {
         try {
-            return $userService->initTwoFactor($request->all());
-        } catch (\DomainException $e) {
-            return response()->json(['error' => $e->getMessage()], 401);
+            if (! $userService->initTwoFactor($request->all())) {
+                throw TwoFactorException::failedSend();
+            }
+
+            return new JsonResponse([
+                'success' => true,
+            ]);
+        } catch (\Throwable $e) {
+            return new JsonResponse($e->getMessage(), 401);
         }
     }
 
@@ -35,7 +42,7 @@ class AuthController extends Controller
 
             return AuthUserPresenter::make($user);
         } catch (TwoFactorException $e) {
-            return response()->json(['error' => $e->getMessage()], 422);
+            return new JsonResponse($e->getMessage(), 422);
         }
     }
 }

@@ -22,4 +22,9 @@ class TwoFactorException extends Exception
     {
         return new self('Слишком много попыток. Повторите через позже');
     }
+
+    public static function failedSend($data = null): self
+    {
+        return new self('2fa.send', $data, 400);
+    }
 }
