@@ -7,8 +7,6 @@ import Tickets from "@/views/Tickets/Index.vue";
 import Dashboard from "@/views/Dashboard/Index.vue";
 import CreateTicket from "@/views/Tickets/Create/Index.vue";
 
-
-
 const router = createRouter({
     history: createWebHistory(),
     routes: [

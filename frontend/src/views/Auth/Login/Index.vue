@@ -1,12 +1,10 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import axios from '@/utils/api.js';
 import GuestLayout from "@/layouts/GuestLayout.vue";
 import {useAuthStore} from "@/stores/authStore.js";
 import FormInput from "@/components/Auth/FormInput.vue";
 import PrimaryButton from "@/components/UI/PrimaryButton.vue";
-import ErrorLabel from "@/components/Errors/ErrorLabel.vue";
 
 const router = useRouter();
 const auth = useAuthStore();
