@@ -1,0 +1,36 @@
+<?php
+
+namespace App\Services;
+
+use App\Contracts\Services\SessionService as SessionServiceContract;
+use App\Exceptions\Auth\AuthException;
+use App\Models\User;
+use Illuminate\Support\Facades\Log;
+
+class SessionService implements SessionServiceContract
+{
+    /**
+     * @throws AuthException
+     */
+    public function login(User $user): User
+    {
+        try {
+            auth()->login($user);
+
+            return $user;
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+
+            throw new AuthException('Authentication failed', 500, $e);
+        }
+    }
+
+    public function logout(): void
+    {
+        try {
+            auth()->logout();
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+        }
+    }
+}

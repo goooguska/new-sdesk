@@ -4,27 +4,31 @@ namespace App\Services;
 
 use App\Contracts\Mailer;
 use App\Contracts\Repositories\UserRepository;
-use App\Contracts\Services\UserService as UserServiceContract;
+use App\Contracts\Services\AuthService as UserServiceContract;
+use App\Contracts\Services\SessionService as SessionService;
 use App\Exceptions\Auth\TwoFactorException;
 use App\Mail\Messages\TwoFactorMessage;
 use App\Models\User;
 use Carbon\Carbon;
+use DomainException;
 use Illuminate\Support\Facades\Hash;
 
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
-class UserService implements UserServiceContract
+class AuthService implements UserServiceContract
 {
     public function __construct(
         private readonly UserRepository $userRepository,
-        private readonly Mailer $mailer
+        private readonly Mailer $mailer,
+        private readonly SessionService $sessionService
     ) {}
 
-    public function initTwoFactor(array $credentials): bool
+    public function initTwoFactor(array $credentials): void
     {
         $user = $this->authenticateUser($credentials);
 
-        return $this->sendTwoFactorCode($user);
+        $this->sendTwoFactorCode($user);
     }
 
     /**
@@ -38,7 +42,12 @@ class UserService implements UserServiceContract
 
         $this->clearTwoFactorCode($user);
 
-        return $user;
+        return $this->sessionService->login($user);
+    }
+
+    public function logout(): void
+    {
+        $this->sessionService->logout();
     }
 
     /**
@@ -47,15 +56,15 @@ class UserService implements UserServiceContract
     private function validateTwoFactorCode(?User $user, string $code): void
     {
         if ($user === null || $user->two_factor_code === null) {
-            throw new TwoFactorException('Invalid two-factor code');
+            throw TwoFactorException::invalidCode();
         }
 
         if ($user->two_factor_code !== $code) {
-            throw new TwoFactorException('Invalid two-factor code');
+            throw TwoFactorException::invalidCode();
         }
 
         if (Carbon::now()->gt($user->two_factor_expires_at)) {
-            throw new TwoFactorException('Code expired');
+            throw TwoFactorException::expiredCode();
         }
     }
 
@@ -72,13 +81,13 @@ class UserService implements UserServiceContract
         $user = $this->userRepository->getByEmail($credentials['email']);
 
         if ($user === null || !Hash::check($credentials['password'], $user->password)) {
-            throw new \DomainException('Данные неверны, проверьте пароль или почту', 401);
+            throw new DomainException('Данные неверны, проверьте пароль или почту', 401);
         }
 
         return $user;
     }
 
-    private function sendTwoFactorCode(User $user): bool
+    private function sendTwoFactorCode(User $user)
     {
         try {
             $code = $this->generateTwoFactorCode();
@@ -94,11 +103,9 @@ class UserService implements UserServiceContract
                 new TwoFactorMessage($code, $user->email)
             );
 
-            return true;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::error($e->getMessage(), ['exception' => $e]);
-
-            return false;
+            throw TwoFactorException::failedSend();
         }
     }
 

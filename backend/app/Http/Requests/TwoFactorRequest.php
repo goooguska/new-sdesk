@@ -19,6 +19,9 @@ class TwoFactorRequest extends FormRequest
 
     public function messages(): array
     {
-        return [];
+        return [
+            'code.required' => 'Код обязателен для заполнения',
+            'code.min' => 'Код должен быть не менее :min символов',
+        ];
     }
 }
