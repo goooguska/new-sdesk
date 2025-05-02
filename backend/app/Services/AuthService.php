@@ -6,6 +6,7 @@ use App\Contracts\Mailer;
 use App\Contracts\Repositories\UserRepository;
 use App\Contracts\Services\AuthService as UserServiceContract;
 use App\Contracts\Services\SessionService as SessionService;
+use App\Events\TestEvent;
 use App\Exceptions\Auth\TwoFactorException;
 use App\Mail\Messages\TwoFactorMessage;
 use App\Models\User;
@@ -90,6 +91,9 @@ class AuthService implements UserServiceContract
         return $user;
     }
 
+    /**
+     * @throws TwoFactorException
+     */
     private function sendTwoFactorCode(User $user)
     {
         try {
@@ -103,7 +107,7 @@ class AuthService implements UserServiceContract
 
             $this->mailer->sendToQueue(
                 $user->email,
-                new TwoFactorMessage($code, $user->email)
+                new TwoFactorMessage($code)
             );
 
         } catch (Throwable $e) {

@@ -4,10 +4,7 @@ namespace App\Mail\Messages;
 
 class TwoFactorMessage extends BaseMessage
 {
-    public function __construct(
-        private readonly string $code,
-        private readonly string $email
-    )
+    public function __construct(private readonly string $code)
     {
         parent::__construct();
 
@@ -26,7 +23,6 @@ class TwoFactorMessage extends BaseMessage
         return [
             'title' => $this->subject,
             'code' => $this->code,
-            'email' => $this->email,
             'expireMinutes' => $expireMinutes,
         ];
     }
