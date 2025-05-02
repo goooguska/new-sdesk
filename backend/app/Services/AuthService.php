@@ -24,6 +24,9 @@ class AuthService implements UserServiceContract
         private readonly SessionService $sessionService
     ) {}
 
+    /**
+     * @throws TwoFactorException
+     */
     public function initTwoFactor(array $credentials): void
     {
         $user = $this->authenticateUser($credentials);
