@@ -1,12 +1,22 @@
 import {createRouter, createWebHistory} from "vue-router";
-import Login from "@/views/Auth/Login.vue";
+import Login from "@/views/Auth/Login/Index.vue";
 import {useAuthStore} from "@/stores/authStore.js";
-import VerifyCode from "@/views/Auth/VerifyCode.vue";
-import Home from "@/views/Home.vue";
+import VerifyCode from "@/views/Auth/Verify/Index.vue";
+import Info from "@/views/Info/Index.vue";
+import Tickets from "@/views/Tickets/Index.vue";
+import Dashboard from "@/views/Dashboard/Index.vue";
+import CreateTicket from "@/views/Tickets/Create/Index.vue";
+
+
 
 const router = createRouter({
     history: createWebHistory(),
     routes: [
+        {
+            path: '/',
+            component: Tickets,
+            meta: { requiresAuth: true }
+        },
         {
             path: '/login',
             component: Login,
@@ -18,40 +28,35 @@ const router = createRouter({
             meta: { guest: true, waitCode: true }
         },
         {
-            path: '/',
-            component: Home,
+            path: '/info',
+            component: Info,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/dashboard',
+            component: Dashboard,
+            meta: { requiresAuth: true }
+        },
+        {
+            path: '/create-ticket',
+            component: CreateTicket,
             meta: { requiresAuth: true }
         },
     ]
 })
 
 router.beforeEach(async (to, from, next) => {
-    const auth = useAuthStore();
-    await auth.me()
+    const auth = useAuthStore()
 
-    if (to.meta.waitCode && !auth.waitCode) {
-        return next('/login');
+    if (!auth.state.isInitialized) {
+        await auth.me()
     }
 
-    if (to.meta.requiresAuth) {
-        if (!auth.isAuthenticated) {
-            return next('/login');
-        }
-        return next();
-    }
+    if (to.meta.waitCode && !auth.state.waitCode) return next('/login')
+    if (to.meta.requiresAuth && !auth.state.isAuthenticated) return next('/login')
+    if (to.meta.guest && auth.state.isAuthenticated) return next('/')
 
-    if (to.meta.guest) {
-        if (auth.isAuthenticated) {
-            return next('/');
-        }
-        return next();
-    }
-
-    if (!auth.isAuthenticated) {
-        return next('/login');
-    }
-
-    next();
+    next()
 })
 
 export default router

@@ -1,6 +1,5 @@
 import Cookies from 'js-cookie'
 import axios from "axios";
-import router from "@/router/index.js";
 
 const axiosInstance  = axios.create({
     baseURL: import.meta.env.VITE_BACKEND_URL,

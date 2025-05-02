@@ -5,7 +5,7 @@ import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.vue";
 
 <template>
   <AuthenticatedLayout>
-    <h1>Добро пожаловать!</h1>
+
   </AuthenticatedLayout>
 </template>
 

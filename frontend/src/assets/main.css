@@ -19,3 +19,11 @@ body {
   font-family: Monda, sans-serif;
 }
 
+a {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+

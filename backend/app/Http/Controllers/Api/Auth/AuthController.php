@@ -11,6 +11,7 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\TwoFactorRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -26,12 +27,12 @@ class AuthController extends Controller
                 'success' => true,
             ]);
         } catch (InvalidCredentialsException $e) {
-            return response()->json([
+            return new JsonResponse([
                 'message' => $e->getMessage(),
                 'errors' => ['email' => [$e->getMessage()]]
             ], 401);
         } catch (TwoFactorException $e) {
-            return response()->json([
+            return new JsonResponse([
                 'message' => $e->getMessage(),
                 'errors' => ['code' => [$e->getMessage()]]
             ], 422);
@@ -62,15 +63,22 @@ class AuthController extends Controller
 
     public function logout(Request $request, AuthService $authService)
     {
-        $authService->logout();
+        try {
+            $authService->logout();
 
-        return new JsonResponse([
-            'success' => true,
-        ]);
+            return new JsonResponse([
+                'success' => true,
+            ]);
+        } catch (\Throwable $e) {
+            return new JsonResponse([
+                'success' => true,
+                'message' => 'Произошла ошибка при выходе.',
+            ], 500);
+        }
     }
 
     public function me(Request $request)
     {
-        return $request->user();
+        return AuthUserPresenter::make($request->user());
     }
 }

@@ -32,7 +32,7 @@ const verify = async () => {
             label="Код"
             type="text"
             v-model="code"
-            :error="auth.errors?.code?.[0]"
+            :error="auth.state.errors?.code?.[0]"
         />
 
         <PrimaryButton class="form-btn" type="submit"> Подтвердить код </PrimaryButton>

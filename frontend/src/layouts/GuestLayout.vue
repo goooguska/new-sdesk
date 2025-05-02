@@ -1,6 +1,6 @@
 <script setup>
 
-import MainLogo from "@/components/icons/MainLogo.vue";
+import MainLogo from "@/components/Icons/MainLogo.vue";
 import ErrorLabel from "@/components/Errors/ErrorLabel.vue";
 import {useAuthStore} from "@/stores/authStore.js";
 
@@ -16,8 +16,8 @@ const auth = useAuthStore();
     <main>
       <slot></slot>
 
-      <div v-if="auth.errors?.general" >
-        <ErrorLabel :error="auth.errors.general[0]"/>
+      <div v-if="auth.state.errors?.general" >
+        <ErrorLabel :error="auth.state.errors.general[0]"/>
       </div>
 
     </main>
@@ -27,6 +27,10 @@ const auth = useAuthStore();
 <style scoped>
 .guest-layout {
   min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .logo {
   margin-bottom: 70px;

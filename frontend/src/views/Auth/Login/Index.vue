@@ -18,7 +18,7 @@ const form = ref({
 const submit = async () => {
   const success = await auth.login(form.value)
 
-  if (success && auth.waitCode) {
+  if (success && auth.state.waitCode) {
     await router.push('/verify-code')
   }
 };
@@ -32,13 +32,13 @@ const submit = async () => {
             label="Email"
             type="email"
             v-model="form.email"
-            :error="auth.errors?.email?.[0]"
+            :error="auth.state.errors?.email?.[0]"
         />
         <FormInput
             label="Пароль"
             type="password"
             v-model="form.password"
-            :error="auth.errors?.password?.[0]"
+            :error="auth.state.errors?.password?.[0]"
         />
 
         <PrimaryButton class="form-btn" type="submit"> Войти </PrimaryButton>

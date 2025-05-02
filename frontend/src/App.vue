@@ -5,7 +5,7 @@ const auth = useAuthStore()
 </script>
 
 <template>
-  <div v-if="auth.isLoading" class="loading-screen">
+  <div v-if="auth.state.isLoading" class="loading-screen">
     Загрузка...
   </div>
   <RouterView class="view" v-else />
@@ -13,9 +13,6 @@ const auth = useAuthStore()
 
 <style scoped>
 .view {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  margin: 50px 0;
 }
 </style>

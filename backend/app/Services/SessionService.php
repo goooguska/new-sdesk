@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Contracts\Services\SessionService as SessionServiceContract;
 use App\Exceptions\Auth\AuthException;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class SessionService implements SessionServiceContract
@@ -28,7 +29,9 @@ class SessionService implements SessionServiceContract
     public function logout(): void
     {
         try {
-            auth()->logout();
+            auth()->guard('web')->logout();
+            session()->invalidate();
+            session()->regenerateToken();
         } catch (\Throwable $e) {
             Log::error($e->getMessage(), ['exception' => $e]);
         }

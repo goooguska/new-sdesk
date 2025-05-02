@@ -20,7 +20,8 @@ class AuthUserPresenter
             'full_name' => $this->user->full_name,
             'email' => $this->user->email,
             'login' => $this->user->login,
-            'role' => $this->user->role['name']
+            'role' => $this->user->role['name'],
+            'role_code' => $this->user->role['code']
         ];
     }
 }
