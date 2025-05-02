@@ -1,13 +1,21 @@
 @import 'base.css';
+@import url('https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Monda:wght@400..700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 #app {
   max-width: 1920px;
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
 }
 
 body {
   margin: 0 auto;
   padding: 0 50px;
+  font-family: Monda, sans-serif;
 }
 

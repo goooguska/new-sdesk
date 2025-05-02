@@ -15,5 +15,6 @@
 :root {
   --primary-color: var(--dark-green);
   --secondary-color: var(--black);
+  --error-color: var(--red);
 
 }
