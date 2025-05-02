@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  $END$
+я футер
 </template>
 
 <style scoped>

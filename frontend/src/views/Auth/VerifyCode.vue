@@ -15,7 +15,7 @@ const verify = async () => {
     const success = await auth.verifyCode(code.value)
 
     if (success) {
-      await router.push('/home')
+      await router.push('/')
     }
   } catch (error) {
     console.error('Verification failed:', error);

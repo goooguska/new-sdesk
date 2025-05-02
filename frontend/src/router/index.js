@@ -18,7 +18,7 @@ const router = createRouter({
             meta: { guest: true, waitCode: true }
         },
         {
-            path: '/home',
+            path: '/',
             component: Home,
             meta: { requiresAuth: true }
         },
@@ -27,6 +27,7 @@ const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
     const auth = useAuthStore();
+    await auth.me()
 
     if (to.meta.waitCode && !auth.waitCode) {
         return next('/login');
@@ -41,7 +42,7 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.meta.guest) {
         if (auth.isAuthenticated) {
-            return next('/home');
+            return next('/');
         }
         return next();
     }

@@ -11,7 +11,7 @@ export const useAuthStore = defineStore('authStore', () => {
   const errors = ref({})
   const isLoading = ref(true)
 
-  const checkAuth = async () => {
+  const me = async () => {
     try {
       const { data } = await axiosInstance.get('/auth/me')
       user.value = data
@@ -62,22 +62,6 @@ export const useAuthStore = defineStore('authStore', () => {
     }
   }
 
-  const me = async () => {
-    if (user.value === null) {
-      await fetchUser()
-    }
-  }
-
-  const fetchUser = async () => {
-    try {
-      const { data } = await axiosInstance.get('/auth/me');
-      user.value = data;
-      isAuthenticated.value = true;
-    } catch (error) {
-      isAuthenticated.value = false;
-    }
-  }
-
   const handleAuthError = (error) => {
     if (error.response?.status === 401) resetState()
     errors.value = error.response?.data?.errors || {
@@ -93,8 +77,6 @@ export const useAuthStore = defineStore('authStore', () => {
     errors.value = {}
   }
 
-  checkAuth()
-
   return {
     user,
     isAuthenticated,
@@ -104,6 +86,6 @@ export const useAuthStore = defineStore('authStore', () => {
     isLoading,
     login,
     verifyCode,
-    checkAuth
+    me
   }
 })
