@@ -1,21 +1,25 @@
 <script setup>
-
 import MainLogo from "@/components/Icons/MainLogo.vue";
-import {computed} from "vue";
-import {useUserStore} from "@/stores/userStore.js";
+import { computed } from "vue";
+import { useUserStore } from "@/stores/userStore.js";
 import AccountInfo from "@/components/Account/AccountInfo.vue";
-import {useAuthStore} from "@/stores/authStore.js";
+import { useAuthStore } from "@/stores/authStore.js";
 
 const navigationRoutes = [
   {
+    path: '/admin',
+    title: 'Административная панель',
+    onlyAdmin: true
+  },
+  {
     path: '/',
     title: 'Обращения',
-    isAdmin: true
+    isManager: true
   },
   {
     path: '/dashboard',
     title: 'Статистика',
-    isAdmin: true
+    isManager: true
   },
   {
     path: '/info',
@@ -24,17 +28,17 @@ const navigationRoutes = [
   {
     path: '/',
     title: 'Ваши обращения',
-    isAdmin: false
+    isManager: false
   },
   {
     path: '/create-ticket',
     title: 'Создать заявку',
-    isAdmin: false
+    isManager: false
   },
   {
     path: '/info',
     title: 'Справка',
-    isAdmin: null
+    isManager: null
   },
 ]
 
@@ -42,9 +46,18 @@ const userStore = useUserStore();
 const auth = useAuthStore();
 
 const actualRoutes = computed(() => {
-  const isAdmin = userStore.checkUserIsAdmin();
+  const role = userStore.getUserRole();
+
+  if (! role) return [];
+
+  if (role === 'admin') {
+    return navigationRoutes.filter(route => route.onlyAdmin);
+  }
+
+  const isManager = role === 'manager';
+
   return navigationRoutes.filter(route =>
-      route.isAdmin === null || route.isAdmin === isAdmin
+      !route.onlyAdmin && (route.isManager === null || route.isManager === isManager)
   );
 });
 </script>

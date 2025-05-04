@@ -5,9 +5,9 @@ export const useUserStore = defineStore('userStore', () => {
 
     const auth = useAuthStore()
 
-    const checkUserIsAdmin = () => {
-        return auth.state?.user?.role_code === 'admin'
+    const getUserRole = () => {
+        return auth.state?.user?.role_code
     }
 
-    return { checkUserIsAdmin }
+    return { getUserRole }
 });

@@ -2,7 +2,10 @@
 
 import AuthenticatedLayout from "@/layouts/AuthenticatedLayout.vue";
 import {useUserStore} from "@/stores/userStore.js";
+import {computed} from "vue";
 const userStore = useUserStore()
+
+const isManager = computed(() => userStore.getUserRole() === 'manager')
 
 </script>
 
@@ -11,7 +14,7 @@ const userStore = useUserStore()
     <div class="info">
       <div class="info-text">
         <p class="info-text__title">Основные шаги</p>
-        <ol class="info-text__list" v-if="userStore.checkUserIsAdmin()">
+        <ol class="info-text__list" v-if="isManager">
           <li>
             <p>Просмотр новых заявок:</p>
             <ul>

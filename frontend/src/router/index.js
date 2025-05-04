@@ -6,6 +6,7 @@ import Info from "@/views/Info/Index.vue";
 import Tickets from "@/views/Tickets/Index.vue";
 import Dashboard from "@/views/Dashboard/Index.vue";
 import CreateTicket from "@/views/Tickets/Create/Index.vue";
+import Admin from "@/views/Admin/Index.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -40,21 +41,33 @@ const router = createRouter({
             component: CreateTicket,
             meta: { requiresAuth: true }
         },
+        {
+            path: '/admin',
+            component: Admin,
+            meta: { requiresAuth: true }
+        },
     ]
 })
 
 router.beforeEach(async (to, from, next) => {
-    const auth = useAuthStore()
+    const auth = useAuthStore();
 
     if (!auth.state.isInitialized) {
-        await auth.me()
+        await auth.me();
     }
 
-    if (to.meta.waitCode && !auth.state.waitCode) return next('/login')
-    if (to.meta.requiresAuth && !auth.state.isAuthenticated) return next('/login')
-    if (to.meta.guest && auth.state.isAuthenticated) return next('/')
+    if (to.meta.waitCode && !auth.state.waitCode) return next('/login');
+    if (to.meta.requiresAuth && !auth.state.isAuthenticated) return next('/login');
+    if (to.meta.guest && auth.state.isAuthenticated) {
+        const role = auth.state.user?.role_code;
+        return next(role === 'admin' ? '/admin' : '/');
+    }
 
-    next()
-})
+    if (to.path === '/' && auth.state.user?.role_code === 'admin') {
+        return next('/admin');
+    }
+
+    next();
+});
 
 export default router

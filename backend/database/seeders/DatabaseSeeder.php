@@ -3,10 +3,7 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use App\Models\Role;
-use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,21 +16,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeder::class,
             StatusSeeder::class,
             RoleSeeder::class,
-        ]);
-
-        $this->makeTestAdmin();
-    }
-
-    private function makeTestAdmin(): void
-    {
-        $roleId = Role::where('code', 'admin')->first()->id;
-
-        User::factory()->create([
-            'full_name' => 'Test User',
-            'email' => 'test@example.com',
-            'login' => 'test',
-            'password' => Hash::make('Test1234!'),
-            'role_id' => $roleId
+            UserSeeder::class,
         ]);
     }
 }
