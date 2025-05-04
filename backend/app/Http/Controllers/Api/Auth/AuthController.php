@@ -11,7 +11,6 @@ use App\Http\Requests\LoginRequest;
 use App\Http\Requests\TwoFactorRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {

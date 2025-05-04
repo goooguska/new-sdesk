@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Contracts\Services\SessionService as SessionServiceContract;
 use App\Exceptions\Auth\AuthException;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class SessionService implements SessionServiceContract

@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Contracts\Repositories\BaseRepository as BaseRepositoryContract;
-use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
@@ -41,9 +40,11 @@ abstract class BaseRepository implements BaseRepositoryContract
         return $this->model->create($fields);
     }
 
-    public function update(array $fields, int $id): Model
+    public function update(int $id, array $fields): Model
     {
-        return $this->getById($id)->update($fields);
+        $this->getById($id)->update($fields);
+
+        return $this->getById($id);
     }
 
     public function delete(int $id): bool
