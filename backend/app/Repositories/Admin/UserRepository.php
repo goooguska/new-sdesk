@@ -11,5 +11,7 @@ class UserRepository extends BaseRepository implements UserRepositoryContract
     public function __construct(User $model)
     {
         parent::__construct($model);
+
+        $this->defaultRelations = ['role'];
     }
 }

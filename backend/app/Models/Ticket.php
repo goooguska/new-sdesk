@@ -15,11 +15,23 @@ class Ticket extends Model
     protected $fillable = [
         'title',
         'description',
-        'assigned_id',
         'creator_id',
+        'assigned_id',
         'status_id',
-        'category_id'
+        'category_id',
     ];
+
+    protected $hidden = [
+        'creator_id',
+        'assigned_id',
+        'status_id',
+        'category_id',
+    ];
+
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(Status::class);
+    }
 
     public function category(): BelongsTo
     {

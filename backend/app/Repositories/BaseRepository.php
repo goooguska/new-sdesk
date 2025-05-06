@@ -12,11 +12,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 abstract class BaseRepository implements BaseRepositoryContract
 {
+    protected array $defaultRelations = [];
+
     public function __construct(protected Model $model) {}
 
     public function all(): Collection
     {
-        return $this->model->all();
+        return $this->model->with($this->getRelations())->get();
     }
 
     /**
@@ -84,5 +86,10 @@ abstract class BaseRepository implements BaseRepositoryContract
         }
 
         return $model->refresh();
+    }
+
+    private function getRelations(): array
+    {
+        return $this->defaultRelations;
     }
 }

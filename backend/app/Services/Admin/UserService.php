@@ -2,7 +2,7 @@
 
 namespace App\Services\Admin;
 
-use App\Contracts\Repositories\UserRepository;
+use App\Contracts\Repositories\Admin\UserRepository;
 use App\Contracts\Services\Admin\UserService as UserServiceContract;
 use App\Services\BaseService;
 
