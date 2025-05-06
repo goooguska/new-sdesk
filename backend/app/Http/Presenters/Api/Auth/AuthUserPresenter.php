@@ -17,7 +17,8 @@ class AuthUserPresenter
     {
         return [
             'id' => $this->user->id,
-            'full_name' => $this->user->full_name,
+            'name' => $this->user->name,
+            'surname' => $this->user->surname,
             'email' => $this->user->email,
             'login' => $this->user->login,
             'role' => $this->user->role['name'],

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Traits\TwoFactorAuthentication;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,7 +13,8 @@ use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @property string $id
- * @property string|null $full_name
+ * @property string|null $name
+ * @property string|null $surname
  * @property string|null $email
  * @property string|null $login
  * @property string|null $password
@@ -33,7 +33,8 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'full_name',
+        'name',
+        'surname',
         'email',
         'login',
         'password',

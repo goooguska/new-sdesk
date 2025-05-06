@@ -24,21 +24,24 @@ class UserSeeder extends Seeder
 
         return [
             [
-                'full_name' => 'Test Admin',
+                'name' => 'Test',
+                'surname' => 'Admin',
                 'email' => 'admin@admin.com',
                 'login' => 'admin',
                 'password' => Hash::make('Test1234!'),
                 'role_id' => $roleAdminId
             ],
             [
-                'full_name' => 'Test Manager',
+                'name' => 'Test',
+                'surname' => 'Manager',
                 'email' => 'manager@manager.com',
                 'login' => 'manager',
                 'password' => Hash::make('Test1234!'),
                 'role_id' => $roleManagerId
             ],
             [
-                'full_name' => 'Test User',
+                'name' => 'Test',
+                'surname' => 'User',
                 'email' => 'user@user.com',
                 'login' => 'user',
                 'password' => Hash::make('Test1234!'),
