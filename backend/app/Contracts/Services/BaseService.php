@@ -6,11 +6,11 @@ interface BaseService
 {
     public function getAll(): array;
 
-    public function getById(int $id): array|null;
+    public function getById(string $id): array|null;
 
     public function create(array $fields): array;
 
-    public function update(int $id, array $fields): array;
+    public function update(string $id, array $fields): array;
 
-    public function delete(int $id): bool;
+    public function delete(string $id): bool;
 }

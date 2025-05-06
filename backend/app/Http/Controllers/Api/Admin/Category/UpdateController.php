@@ -6,6 +6,8 @@ use App\Contracts\Services\Admin\CategoryService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Category\UpdateRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class UpdateController extends Controller
 {
@@ -15,10 +17,18 @@ class UpdateController extends Controller
         CategoryService $service
     )
     {
-        $data = $service->update($categoryId, $request->all());
+        try {
+            $data = $service->update($categoryId, $request->all());
 
-        return new JsonResponse([
-            'data' => $data,
-        ], 200);
+            return new JsonResponse([
+                'data' => $data,
+            ]);
+        } catch (NotFoundHttpException $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+
+            return new JsonResponse([
+                'error' => $e->getMessage(),
+            ], 404);
+        }
     }
 }

@@ -27,4 +27,20 @@ $router->group(['prefix' => 'admin', 'namespace' => 'App\Http\Controllers\Api\Ad
         $router->patch('/{roleId}/update', 'UpdateController');
         $router->delete('/{roleId}/delete', 'DeleteController');
     });
+
+    $router->group(['prefix' => 'users', 'namespace' => 'User'], function (Router $router) {
+        $router->get('/', 'IndexController');
+        $router->get('/{userId}', 'ShowController');
+        $router->post('/create', 'CreateController');
+        $router->patch('/{userId}/update', 'UpdateController');
+        $router->delete('/{userId}/delete', 'DeleteController');
+    });
+
+    $router->group(['prefix' => 'tickets', 'namespace' => 'Ticket'], function (Router $router) {
+        $router->get('/', 'IndexController');
+        $router->get('/{ticketId}', 'ShowController');
+        $router->post('/create', 'CreateController');
+        $router->patch('/{ticketId}/update', 'UpdateController');
+        $router->delete('/{ticketId}/delete', 'DeleteController');
+    });
 });

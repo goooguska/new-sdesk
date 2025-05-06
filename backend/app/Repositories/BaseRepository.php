@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Contracts\Repositories\BaseRepository as BaseRepositoryContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @template TModel of Model
@@ -19,36 +20,69 @@ abstract class BaseRepository implements BaseRepositoryContract
     }
 
     /**
-     * @return TModel
+     * @param string $id
+     *
+     * @return Model|null
      */
-    public function getById(int $id): ?Model
+    public function getById(string $id): ?Model
     {
         return $this->model->find($id);
     }
 
-    public function save(Model $model): Model
+    /**
+     * @param array $fields
+     *
+     * @return Model
+     */
+    public function create(array $fields): Model
     {
-        if (! $model->save()) {
-            throw new \RuntimeException('Failed to save user');
+        $model = $this->model->create($fields);
+
+        if (! $model) {
+            throw new \RuntimeException("Ошибка при создании записи.");
+        }
+
+        return $model;
+    }
+
+    /**
+     * @param string   $id
+     * @param array $fields
+     *
+     * @return Model
+     */
+    public function update(string $id, array $fields): Model
+    {
+        $model = $this->model->find($id);
+
+        if ($model === null) {
+            throw new NotFoundHttpException("Запись не найдена.");
+        }
+
+        if (! $model->update($fields)) {
+            throw new \RuntimeException("Ошибка при обновлении записи.");
         }
 
         return $model->refresh();
     }
 
-    public function create(array $fields): Model
+    public function delete(string $id): bool
     {
-        return $this->model->create($fields);
+        $model = $this->model->find($id);
+
+        if ($model === null) {
+            throw new NotFoundHttpException("Запись не найдена.");
+        }
+
+        return $model->delete();
     }
 
-    public function update(int $id, array $fields): Model
+    public function save(Model $model): Model
     {
-        $this->getById($id)->update($fields);
+        if (! $model->save()) {
+            throw new \RuntimeException('Ошибка при сохранении модели.');
+        }
 
-        return $this->getById($id);
-    }
-
-    public function delete(int $id): bool
-    {
-        return $this->getById($id)->delete();
+        return $model->refresh();
     }
 }

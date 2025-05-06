@@ -10,7 +10,7 @@ abstract class BaseService implements BaseServiceContract
 {
     public function __construct(private readonly BaseRepository $repository) {}
 
-    public function getById(int $id): array|null
+    public function getById(string $id): array|null
     {
         $entity = $this->repository->getById($id);
 
@@ -31,12 +31,12 @@ abstract class BaseService implements BaseServiceContract
         return $this->repository->create($fields)->toArray();
     }
 
-    public function update(int $id, array $fields): array
+    public function update(string $id, array $fields): array
     {
         return $this->repository->update($id, $fields)->toArray();
     }
 
-    public function delete(int $id): bool
+    public function delete(string $id): bool
     {
         return $this->repository->delete($id);
     }

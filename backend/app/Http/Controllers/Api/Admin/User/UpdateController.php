@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin\Status;
+namespace App\Http\Controllers\Api\Admin\User;
 
-use App\Contracts\Services\Admin\StatusService;
+use App\Contracts\Services\Admin\UserService;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Status\UpdateRequest;
+use App\Http\Requests\Admin\User\UpdateRequest;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
@@ -17,12 +17,12 @@ class UpdateController extends Controller
      */
     public function __invoke(
         UpdateRequest $request,
-        string $statusId,
-        StatusService $service
+        string $userId,
+        UserService $service
     )
     {
         try {
-            $data = $service->update($statusId, $request->all());
+            $data = $service->update($userId, $request->all());
 
             return new JsonResponse([
                 'data' => $data,

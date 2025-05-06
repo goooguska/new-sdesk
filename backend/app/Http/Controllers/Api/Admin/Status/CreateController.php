@@ -6,6 +6,8 @@ use App\Contracts\Services\Admin\StatusService;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Status\CreateRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class CreateController extends Controller
 {
@@ -14,10 +16,18 @@ class CreateController extends Controller
         StatusService $service
     )
     {
-        $data = $service->create($request->all());
+        try {
+            $data = $service->create($request->all());
 
-        return new JsonResponse([
-            'data' => $data,
-        ], 200);
+            return new JsonResponse([
+                'data' => $data,
+            ], 201);
+        } catch (Throwable $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+
+            return new JsonResponse([
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

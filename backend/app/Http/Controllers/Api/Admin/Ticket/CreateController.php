@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Api\Admin\Role;
+namespace App\Http\Controllers\Api\Admin\Ticket;
 
-use App\Contracts\Services\Admin\RoleService;
+use App\Contracts\Services\Admin\TicketService;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Role\CreateRequest;
+use App\Http\Requests\Admin\Ticket\CreateRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Throwable;
@@ -13,7 +13,7 @@ class CreateController extends Controller
 {
     public function __invoke(
         CreateRequest $request,
-        RoleService $service
+        TicketService $service
     )
     {
         try {
