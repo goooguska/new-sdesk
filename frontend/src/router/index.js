@@ -7,6 +7,11 @@ import Tickets from "@/views/Tickets/Index.vue";
 import Dashboard from "@/views/Dashboard/Index.vue";
 import CreateTicket from "@/views/Tickets/Create/Index.vue";
 import Admin from "@/views/Admin/Index.vue";
+import User from "@/views/Admin/User/Index.vue";
+import Category from "@/views/Admin/Category/Index.vue";
+import Status from "@/views/Admin/Status/Index.vue";
+import Role from "@/views/Admin/Role/Index.vue";
+import Ticket from "@/views/Admin/Ticket/Index.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -14,37 +19,64 @@ const router = createRouter({
         {
             path: '/',
             component: Tickets,
-            meta: { requiresAuth: true }
+            meta: { requiresAuth: true },
         },
         {
             path: '/login',
             component: Login,
-            meta: { guest: true }
+            meta: { guest: true },
         },
         {
             path: '/verify-code',
             component: VerifyCode,
-            meta: { guest: true, waitCode: true }
+            meta: { guest: true, waitCode: true },
         },
         {
             path: '/info',
             component: Info,
-            meta: { requiresAuth: true }
+            meta: { requiresAuth: true },
         },
         {
             path: '/dashboard',
             component: Dashboard,
-            meta: { requiresAuth: true }
+            meta: { requiresAuth: true },
         },
         {
             path: '/create-ticket',
             component: CreateTicket,
-            meta: { requiresAuth: true }
+            meta: { requiresAuth: true },
         },
         {
             path: '/admin',
             component: Admin,
-            meta: { requiresAuth: true }
+            meta: { requiresAuth: true },
+            children: [
+                {
+                    path: 'statuses',
+                    name: 'statuses',
+                    component: Status,
+                },
+                {
+                    path: 'roles',
+                    name: 'roles',
+                    component: Role,
+                },
+                {
+                    path: 'categories',
+                    name: 'categories',
+                    component: Category,
+                },
+                {
+                    path: 'users',
+                    name: 'users',
+                    component: User,
+                },
+                {
+                    path: 'tickets',
+                    name: 'tickets',
+                    component: Ticket,
+                },
+            ]
         },
     ]
 })
