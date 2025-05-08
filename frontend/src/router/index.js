@@ -12,6 +12,8 @@ import Category from "@/views/Admin/Entity/Index.vue";
 import Status from "@/views/Admin/Entity/Index.vue";
 import Role from "@/views/Admin/Entity/Index.vue";
 import Ticket from "@/views/Admin/Entity/Index.vue";
+import Detail from "@/views/Tickets/Detail/Index.vue";
+import NotFound from "@/views/NotFound/Index.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -19,6 +21,11 @@ const router = createRouter({
         {
             path: '/',
             component: Tickets,
+            meta: { requiresAuth: true },
+        },
+        {
+            path: '/tickets/:id',
+            component: Detail,
             meta: { requiresAuth: true },
         },
         {
@@ -45,6 +52,11 @@ const router = createRouter({
             path: '/create-ticket',
             component: CreateTicket,
             meta: { requiresAuth: true },
+        },
+        {
+            path: '/:pathMatch(.*)*',
+            name: 'not-found',
+            component: NotFound,
         },
         {
             path: '/admin',

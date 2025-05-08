@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import GuestLayout from "@/layouts/GuestLayout.vue";
 import {useAuthStore} from "@/stores/authStore.js";
-import FormInput from "@/components/Auth/FormInput.vue";
+import FormInput from "@/components/UI/FormInput.vue";
 import PrimaryButton from "@/components/UI/PrimaryButton.vue";
 
 const router = useRouter();
