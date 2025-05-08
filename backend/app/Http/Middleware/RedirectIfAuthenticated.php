@@ -25,7 +25,7 @@ class RedirectIfAuthenticated
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
                 if ($request->expectsJson()) {
-                    throw new AlreadyAuthenticatedException();
+                    throw new AlreadyAuthenticatedException('Пользователь уже авторизован', 409);
                 }
 
                 return redirect(RouteServiceProvider::HOME);

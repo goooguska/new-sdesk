@@ -9,18 +9,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Presenters\Api\Auth\AuthUserPresenter;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\TwoFactorRequest;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Throwable;
 
 class AuthController extends Controller
 {
     public function login(
         LoginRequest $request,
-        AuthService $userService
+        AuthService $authService
     )
     {
         try {
-            $userService->initTwoFactor($request->all());
+            $authService->initTwoFactor($request->all());
 
             return new JsonResponse([
                 'success' => true,
@@ -40,11 +42,11 @@ class AuthController extends Controller
 
     public function confirmTwoFactor(
         TwoFactorRequest $request,
-        AuthService $userService
+        AuthService $authService
     )
     {
         try {
-            $user = $userService->confirmTwoFactor(
+            $user = $authService->confirmTwoFactor(
                 $request->input('email'),
                 $request->input('code')
             );
@@ -68,7 +70,7 @@ class AuthController extends Controller
             return new JsonResponse([
                 'success' => true,
             ]);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             return new JsonResponse([
                 'success' => true,
                 'message' => 'Произошла ошибка при выходе.',
@@ -76,8 +78,10 @@ class AuthController extends Controller
         }
     }
 
-    public function me(Request $request)
+    public function me(Request $request, AuthService $authService): array
     {
-        return AuthUserPresenter::make($request->user());
+      $user = $authService->me();
+
+      return AuthUserPresenter::make($user);
     }
 }

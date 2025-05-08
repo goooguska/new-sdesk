@@ -11,4 +11,6 @@ interface AuthService
     public function confirmTwoFactor(string $email, string $code): User;
 
     public function logout(): void;
+
+    public function me(): User;
 }

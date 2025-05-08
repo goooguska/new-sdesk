@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\Services\SessionService as SessionServiceContract;
 use App\Exceptions\Auth\AuthException;
+use App\Exceptions\UserException;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
@@ -33,6 +34,21 @@ class SessionService implements SessionServiceContract
             session()->regenerateToken();
         } catch (\Throwable $e) {
             Log::error($e->getMessage(), ['exception' => $e]);
+        }
+    }
+
+    /**
+     * @throws UserException
+     */
+    public function me(): User
+    {
+        try {
+            return auth()->user();
+
+        } catch (\Throwable $e) {
+            Log::error($e->getMessage(), ['exception' => $e]);
+
+            throw UserException::notFound();
         }
     }
 }

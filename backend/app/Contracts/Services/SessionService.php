@@ -9,4 +9,6 @@ interface SessionService
     public function login(User $user): User;
 
     public function logout(): void;
+
+    public function me(): User;
 }

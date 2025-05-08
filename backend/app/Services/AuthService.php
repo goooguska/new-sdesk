@@ -59,6 +59,11 @@ class AuthService implements UserServiceContract
         $this->sessionService->logout();
     }
 
+    public function me(): User
+    {
+        return $this->sessionService->me();
+    }
+
     /**
      * @throws TwoFactorException
      */

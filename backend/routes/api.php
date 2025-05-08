@@ -13,6 +13,7 @@ $router->group(['prefix' => 'auth', 'namespace' => 'App\Http\Controllers\Api\Aut
 });
 
 $router->group(['prefix' => 'tickets', 'namespace' => 'App\Http\Controllers\Api\Ticket', 'middleware' => 'auth:sanctum'], function (Router $router) {
+    $router->get('/', 'ListController@getAll');
     $router->post('/create', 'MutateController@create');
 });
 

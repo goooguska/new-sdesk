@@ -9,6 +9,11 @@ class UserException extends EntityException
         return new static(parent::notFound()->getMessage());
     }
 
+    public static function notSupportRole(): static
+    {
+        return new static('Текущая роль не поддерживается');
+    }
+
     protected static function entity(): string
     {
        return 'user';
