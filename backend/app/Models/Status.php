@@ -16,6 +16,11 @@ class Status extends Model
         'name'
     ];
 
+    protected $casts = [
+        'created_at' => 'date:d.m.Y H:i:s',
+        'updated_at' => 'date:d.m.Y H:i:s',
+    ];
+
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);

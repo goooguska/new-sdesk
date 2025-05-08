@@ -28,6 +28,11 @@ class Ticket extends Model
         'category_id',
     ];
 
+    protected $casts = [
+        'created_at' => 'date:d.m.Y H:i:s',
+        'updated_at' => 'date:d.m.Y H:i:s',
+    ];
+
     public function status(): BelongsTo
     {
         return $this->belongsTo(Status::class);

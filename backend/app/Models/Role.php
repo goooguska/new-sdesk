@@ -17,6 +17,11 @@ class Role extends Model
         'code'
     ];
 
+    protected $casts = [
+        'created_at' => 'date:d.m.Y H:i:s',
+        'updated_at' => 'date:d.m.Y H:i:s',
+    ];
+
     public function users(): HasMany
     {
         return $this->hasMany(User::class);

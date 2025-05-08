@@ -52,7 +52,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'role_id',
-        'password',
         'remember_token',
         'two_factor_code',
         'two_factor_expires_at',
@@ -65,8 +64,10 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
-        'two_factor_expires_at' => 'datetime',
+        'email_verified_at' => 'date:d.m.Y H:i:s',
+        'two_factor_expires_at' => 'date:d.m.Y H:i:s',
+        'created_at' => 'date:d.m.Y H:i:s',
+        'updated_at' => 'date:d.m.Y H:i:s',
         'password' => 'hashed',
     ];
 
