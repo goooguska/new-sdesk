@@ -6,7 +6,9 @@ use App\Contracts\Repositories\TicketRepository;
 use App\Contracts\Services\AuthService;
 use App\Contracts\Services\StatusService;
 use App\Contracts\Services\TicketService as TicketServiceContract;
+use App\Contracts\Services\UserService;
 use App\Enums\StatusEnum;
+use App\Events\Ticket\CreatedEvent;
 use App\Exceptions\StatusException;
 use App\Exceptions\UserException;
 use App\Models\Status;
@@ -16,7 +18,8 @@ class TicketService extends BaseService implements TicketServiceContract
     public function __construct(
         private readonly TicketRepository $repository,
         private readonly StatusService $statusService,
-        private readonly AuthService $authService
+        private readonly AuthService $authService,
+        private readonly UserService $userService
     )
     {
         parent::__construct($repository);
@@ -31,7 +34,13 @@ class TicketService extends BaseService implements TicketServiceContract
             $fields['status_id'] = $this->getWorkStatus()->id;
         }
 
-        return $this->create($fields);
+        $assigner = $this->userService->getById($fields['assigned_id']);
+
+        $createdTicket = $this->create($fields);
+
+        event(new CreatedEvent($assigner['email'], $createdTicket));
+
+        return $createdTicket;
     }
 
     /**

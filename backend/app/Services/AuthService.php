@@ -3,9 +3,9 @@
 namespace App\Services;
 
 use App\Contracts\Mailer;
-use App\Contracts\Repositories\UserRepository;
 use App\Contracts\Services\AuthService as UserServiceContract;
 use App\Contracts\Services\SessionService;
+use App\Contracts\Services\UserService;
 use App\Exceptions\Auth\TwoFactorException;
 use App\Exceptions\UserException;
 use App\Mail\Messages\TwoFactorMessage;
@@ -20,7 +20,7 @@ use Throwable;
 class AuthService implements UserServiceContract
 {
     public function __construct(
-        private readonly UserRepository $userRepository,
+        private readonly UserService $userService,
         private readonly Mailer $mailer,
         private readonly SessionService $sessionService
     ) {}
@@ -41,7 +41,7 @@ class AuthService implements UserServiceContract
      */
     public function confirmTwoFactor(string $email, string $code): User
     {
-        $user = $this->userRepository->getByEmail($email);
+        $user = $this->userService->getByEmail($email);
 
         if ($user === null) {
             throw UserException::notFound();
@@ -87,12 +87,12 @@ class AuthService implements UserServiceContract
         $user->two_factor_code = null;
         $user->two_factor_expires_at = null;
 
-        $this->userRepository->save($user);
+        $this->userService->save($user);
     }
 
     private function authenticateUser(array $credentials): User
     {
-        $user = $this->userRepository->getByEmail($credentials['email']);
+        $user = $this->userService->getByEmail($credentials['email']);
 
         if ($user === null || !Hash::check($credentials['password'], $user->password)) {
             throw new DomainException('Данные неверны, проверьте пароль или почту', 401);
@@ -113,7 +113,7 @@ class AuthService implements UserServiceContract
                 config('auth.two_factor.expire', 300)
             );
 
-            $this->userRepository->save($user);
+            $this->userService->save($user);
 
             $this->mailer->sendToQueue(
                 $user->email,

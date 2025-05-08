@@ -22,6 +22,7 @@ use App\Contracts\Services\BaseService as BaseServiceContract;
 use App\Contracts\Services\SessionService as SessionServiceContract;
 use App\Contracts\Services\StatusService as StatusServiceContract;
 use App\Contracts\Services\TicketService as TicketServiceContract;
+use App\Contracts\Services\UserService as UserServiceContract;
 use App\Mail\Mailer;
 use App\Repositories\Admin\CategoryRepository;
 use App\Repositories\Admin\RoleRepository;
@@ -42,6 +43,7 @@ use App\Services\BaseService;
 use App\Services\SessionService;
 use App\Services\StatusService;
 use App\Services\TicketService;
+use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -156,6 +158,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             StatusServiceContract::class,
             StatusService::class
+        );
+
+        $this->app->bind(
+            UserServiceContract::class,
+            UserService::class
         );
     }
 

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Contracts\Repositories;
+namespace App\Contracts\Services;
 
 use App\Models\User;
 
-interface UserRepository
+interface UserService
 {
     public function getByEmail(string $email): ?User;
 }

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Contracts\Repositories\BaseRepository;
 use App\Contracts\Services\BaseService as BaseServiceContract;
+use Illuminate\Database\Eloquent\Model;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 abstract class BaseService implements BaseServiceContract
@@ -39,5 +40,10 @@ abstract class BaseService implements BaseServiceContract
     public function delete(string $id): bool
     {
         return $this->repository->delete($id);
+    }
+
+    public function save(Model $model): Model
+    {
+        return $this->repository->save($model);
     }
 }
