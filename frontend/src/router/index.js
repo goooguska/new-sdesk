@@ -7,11 +7,11 @@ import Tickets from "@/views/Tickets/Index.vue";
 import Dashboard from "@/views/Dashboard/Index.vue";
 import CreateTicket from "@/views/Tickets/Create/Index.vue";
 import Admin from "@/views/Admin/Index.vue";
-import User from "@/views/Admin/User/Index.vue";
-import Category from "@/views/Admin/Category/Index.vue";
-import Status from "@/views/Admin/Status/Index.vue";
-import Role from "@/views/Admin/Role/Index.vue";
-import Ticket from "@/views/Admin/Ticket/Index.vue";
+import User from "@/views/Admin/Entity/Index.vue";
+import Category from "@/views/Admin/Entity/Index.vue";
+import Status from "@/views/Admin/Entity/Index.vue";
+import Role from "@/views/Admin/Entity/Index.vue";
+import Ticket from "@/views/Admin/Entity/Index.vue";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -50,6 +50,7 @@ const router = createRouter({
             path: '/admin',
             component: Admin,
             meta: { requiresAuth: true },
+            redirect: '/admin/statuses',
             children: [
                 {
                     path: 'statuses',
