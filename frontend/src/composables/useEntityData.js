@@ -7,9 +7,6 @@ export function useEntityData() {
     const adminStore = useAdminStore();
 
     const entityCode = computed(() => route.name);
-    const entity = computed(() =>
-        adminStore.adminEntities.find(e => e.code === entityCode.value)
-    );
 
     const items = computed(() => adminStore[entityCode.value] || []);
     const loading = ref(false);
@@ -26,7 +23,6 @@ export function useEntityData() {
 
     return {
         entityCode,
-        entity,
         items,
         loading
     };

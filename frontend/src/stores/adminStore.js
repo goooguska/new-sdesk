@@ -1,149 +1,80 @@
-import {defineStore} from "pinia";
-import {ref} from "vue";
+import { defineStore } from "pinia";
+import { ref } from "vue";
 import axiosInstance from "@/utils/api.js";
 
 export const useAdminStore = defineStore('adminStore', () => {
-
     const adminEntities = [
-        {
-            name: "Статусы",
-            code: "statuses"
-        },
+        { name: "Статусы", code: "statuses", refData: ref([]) },
+        { name: "Роли", code: "roles", refData: ref([]) },
+        { name: "Категории", code: "categories", refData: ref([]) },
+        { name: "Пользователи", code: "users", refData: ref([]) },
+        { name: "Заявки", code: "tickets", refData: ref([]) },
+    ];
 
-        {
-            name: "Роли",
-            code: "roles"
-        },
-
-        {
-            name: "Категории",
-            code: "categories"
-        },
-
-        {
-            name: "Пользователи",
-            code: "users"
-        },
-
-        {
-            name: "Заявки",
-            code: "tickets"
-        },
-    ]
-
-    const statuses = ref([]);
-    const categories = ref([]);
-    const roles = ref([]);
-    const users = ref([]);
-    const tickets = ref([]);
-
-    const getAllStatuses = async () => {
-        try {
-            const { data } = await axiosInstance.get('/admin/statuses');
-            if (data?.data) {
-                statuses.value = data.data;
-            } else {
-                console.error("Данные статусов не найдены в ответе API.");
-            }
-        } catch (error) {
-            console.error("Ошибка при получении статусов:", error);
-        }
+    const adminFieldMap = {
+        id: 'ID',
+        name: 'Имя',
+        surname: 'Фамилия',
+        email: 'Email',
+        login: 'Логин',
+        password: 'Пароль',
+        created_at: 'Дата создания',
+        updated_at: 'Дата обновления',
+        role: 'Роль',
+        status: 'Статус',
+        category: 'Категория',
+        title: 'Заголовок',
+        description: 'Описание',
+        assigned: 'Назначен',
+        creator: 'Создатель',
     };
 
-    const getAllRoles = async () => {
-        try {
-            const { data } = await axiosInstance.get('/admin/roles');
-            if (data?.data) {
-                roles.value = data.data;
-            } else {
-                console.error("Данные ролей не найдены в ответе API.");
-            }
-        } catch (error) {
-            console.error("Ошибка при получении ролей:", error);
-        }
+    const excludedFields = ['id', 'created_at', 'updated_at'];
+
+    const relations = {
+        role: "roles",
+        status: "statuses",
+        category: "categories",
+        assigned: "users",
+        creator: "users",
     };
 
-    const getAllCategories = async () => {
-        try {
-            const { data } = await axiosInstance.get('/admin/categories');
-            if (data?.data) {
-                categories.value = data.data;
-            } else {
-                console.error("Данные категорий не найдены в ответе API.");
-            }
-        } catch (error) {
-            console.error("Ошибка при получении категорий:", error);
-        }
+    const fieldTypes = {
+        description: 'textarea',
     };
 
-    const getAllUsers = async () => {
-        try {
-            const { data } = await axiosInstance.get('/admin/users');
-            if (data?.data) {
-                users.value = data.data;
-            } else {
-                console.error("Данные пользователей не найдены в ответе API.");
-            }
-        } catch (error) {
-            console.error("Ошибка при получении пользователей:", error);
-        }
-    };
-
-    const getAllTickets = async () => {
-        try {
-            const { data } = await axiosInstance.get('/admin/tickets');
-            if (data?.data) {
-                tickets.value = data.data;
-            } else {
-                console.error("Данные заявок не найдены в ответе API.");
-            }
-        } catch (error) {
-            console.error("Ошибка при получении заявок:", error);
-        }
+    const fieldsForCreate = {
+        roles: ['name', 'code'],
+        statuses: ['name'],
+        categories: ['name'],
+        users: ['name', 'surname', 'email', 'login', 'password', 'role_id'],
+        tickets: ['title', 'description', 'assigned_id', 'creator_id', 'status_id', 'category_id'],
     };
 
     const getData = async (entityCode) => {
+        const entity = adminEntities.find((e) => e.code === entityCode);
+
+        if (!entity) {
+            console.error("Неизвестная сущность:", entityCode);
+            return;
+        }
+
         try {
             const { data: responseData } = await axiosInstance.get(`/admin/${entityCode}`);
-
-            switch (entityCode) {
-                case 'statuses':
-                    statuses.value = responseData.data;
-                    break;
-                case 'roles':
-                    roles.value = responseData.data;
-                    break;
-                case 'categories':
-                    categories.value = responseData.data;
-                    break;
-                case 'users':
-                    users.value = responseData.data;
-                    break;
-                case 'tickets':
-                    tickets.value = responseData.data;
-                    break;
-                default:
-                    console.error("Неизвестная сущность:", entityCode);
-            }
+            entity.refData.value = responseData.data;
         } catch (error) {
             console.error(`Ошибка при получении данных для ${entityCode}:`, error);
         }
     };
 
-
-
     return {
         adminEntities,
-        statuses,
-        categories,
-        roles,
-        users,
-        tickets,
-        getAllStatuses,
-        getAllCategories,
-        getAllRoles,
-        getAllUsers,
-        getAllTickets,
-        getData
+        adminFieldMap,
+        excludedFields,
+        relations,
+        fieldTypes,
+        fieldsForCreate,
+        getData,
+        ...Object.fromEntries(adminEntities.map(e => [e.code, e.refData])),
     };
 });
