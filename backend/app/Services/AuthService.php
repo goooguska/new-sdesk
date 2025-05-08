@@ -5,9 +5,9 @@ namespace App\Services;
 use App\Contracts\Mailer;
 use App\Contracts\Repositories\UserRepository;
 use App\Contracts\Services\AuthService as UserServiceContract;
-use App\Contracts\Services\SessionService as SessionService;
-use App\Events\TestEvent;
+use App\Contracts\Services\SessionService;
 use App\Exceptions\Auth\TwoFactorException;
+use App\Exceptions\UserException;
 use App\Mail\Messages\TwoFactorMessage;
 use App\Models\User;
 use Carbon\Carbon;
@@ -37,10 +37,15 @@ class AuthService implements UserServiceContract
 
     /**
      * @throws TwoFactorException
+     * @throws UserException
      */
     public function confirmTwoFactor(string $email, string $code): User
     {
         $user = $this->userRepository->getByEmail($email);
+
+        if ($user === null) {
+            throw UserException::notFound();
+        }
 
         $this->validateTwoFactorCode($user, $code);
 
@@ -94,7 +99,7 @@ class AuthService implements UserServiceContract
     /**
      * @throws TwoFactorException
      */
-    private function sendTwoFactorCode(User $user)
+    private function sendTwoFactorCode(User $user): void
     {
         try {
             $code = $this->generateTwoFactorCode();

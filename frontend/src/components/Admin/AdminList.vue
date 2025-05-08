@@ -6,7 +6,7 @@ import ViewPopup from "@/components/Admin/components/popups/ViewPopup.vue";
 import EditPopup from "@/components/Admin/components/popups/EditPopup.vue";
 import DeletePopup from "@/components/Admin/components/popups/DeletePopup.vue";
 import {useAdminStore} from "@/stores/adminStore.js";
-import {useEntityCrud} from "@/composables/useEntityCrud.js";
+import {useEntityCrud} from "@/composables/admin/useEntityCrud.js";
 import CreatePopup from "@/components/Admin/components/popups/CreatePopup.vue";
 import SaveButton from "@/components/Admin/components/UI/SaveButton.vue";
 

@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Status;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class StatusSeeder extends Seeder
@@ -12,7 +11,8 @@ class StatusSeeder extends Seeder
     {
         foreach ($this->statuses() as $status) {
             Status::factory()->create([
-                'name' => $status,
+                'name' => $status['name'],
+                'code' => $status['code'],
             ]);
         }
     }
@@ -20,9 +20,18 @@ class StatusSeeder extends Seeder
     private function statuses(): array
     {
         return [
-            'Выполнена',
-            'В работе',
-            'Отклонена'
+            [
+                'name' => 'Выполнена',
+                'code' => 'done',
+            ],
+            [
+                'name' => 'В работе',
+                'code' => 'work',
+            ],
+            [
+                'name' => 'Отклонена',
+                'code' => 'rejected',
+            ],
         ];
     }
 }

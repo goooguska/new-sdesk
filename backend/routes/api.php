@@ -12,4 +12,8 @@ $router->group(['prefix' => 'auth', 'namespace' => 'App\Http\Controllers\Api\Aut
     $router->post('/logout', 'AuthController@logout')->middleware('auth:sanctum');
 });
 
+$router->group(['prefix' => 'tickets', 'namespace' => 'App\Http\Controllers\Api\Ticket', 'middleware' => 'auth:sanctum'], function (Router $router) {
+    $router->post('/create', 'MutateController@create');
+});
+
 require 'admin_api.php';
