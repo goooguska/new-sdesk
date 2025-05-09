@@ -66,7 +66,7 @@ const updateSort = (key, value) => {
 .reset-button {
   font-size: 14px;
   color: var(--white);
-  background-color: var(--gray);
+  background-color: var(--green);
   padding: 8px 16px;
   border-radius: 4px;
   border: none;
@@ -75,6 +75,6 @@ const updateSort = (key, value) => {
 }
 
 .reset-button:hover {
-  background-color: var(--dark-gray) ;
+  background-color: var(--dark-green) ;
 }
 </style>
