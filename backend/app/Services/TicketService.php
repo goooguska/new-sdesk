@@ -10,6 +10,7 @@ use App\Contracts\Services\UserService;
 use App\Enums\StatusEnum;
 use App\Events\Ticket\CreatedEvent;
 use App\Exceptions\StatusException;
+use App\Exceptions\TicketException;
 use App\Exceptions\UserException;
 use App\Models\Status;
 
@@ -62,6 +63,19 @@ class TicketService extends BaseService implements TicketServiceContract
         }
 
         return $this->repository->getAllByUserIdAndRole($user->id, $userRole)->toArray();
+    }
+
+    /**
+     * @throws TicketException
+     */
+    public function getTicketById(string $id): array
+    {
+        $ticket = $this->repository->getTicketById($id);
+        if (! $ticket) {
+            throw TicketException::notFound();
+        }
+
+        return $ticket->toArray();
     }
 
     /**

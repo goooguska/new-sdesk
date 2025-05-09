@@ -22,4 +22,13 @@ class TicketRepository extends BaseRepository implements TicketRepositoryContrac
             ->where($userRole, $userId)
             ->get();
     }
+
+    public function getTicketById(string $id): ?Ticket
+    {
+        /** @var Ticket|null */
+        return $this->model
+            ->with($this->defaultRelations)
+            ->where('id', $id)
+            ->first();
+    }
 }

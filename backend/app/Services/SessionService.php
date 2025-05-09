@@ -16,6 +16,9 @@ class SessionService implements SessionServiceContract
     public function login(User $user): User
     {
         try {
+            //TODO Браузер хранит куки, пока не решил как эту тему решить на клиенте
+            // Поэтому делаем logout
+            $this->logout();
             auth()->login($user);
 
             return $user;

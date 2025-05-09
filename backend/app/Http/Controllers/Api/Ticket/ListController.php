@@ -10,7 +10,7 @@ class ListController
 {
     public function __construct(private readonly TicketService $ticketService) {}
 
-    public function getAll(Request $request)
+    public function tickets(Request $request): JsonResponse
     {
         $data = $this->ticketService->getAllForCurrentUser();
 

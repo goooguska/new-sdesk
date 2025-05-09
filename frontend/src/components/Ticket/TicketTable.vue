@@ -1,6 +1,6 @@
 <script setup>
 import { defineProps } from 'vue'
-import { formatDate } from "../../utils/formatCode.js";
+import { formatDate } from "../../utils/formatDate.js";
 import { useRouter } from 'vue-router'
 
 const router = useRouter()

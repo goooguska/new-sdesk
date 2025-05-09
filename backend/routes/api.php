@@ -13,8 +13,15 @@ $router->group(['prefix' => 'auth', 'namespace' => 'App\Http\Controllers\Api\Aut
 });
 
 $router->group(['prefix' => 'tickets', 'namespace' => 'App\Http\Controllers\Api\Ticket', 'middleware' => 'auth:sanctum'], function (Router $router) {
-    $router->get('/', 'ListController@getAll');
+    $router->get('/', 'ListController@tickets');
     $router->post('/create', 'MutateController@create');
+    $router->get('/{ticketId}', 'DetailController@ticket');
+    $router->patch('/{ticketId}/update', 'MutateController@update');
+    $router->delete('/{ticketId}/delete', 'MutateController@delete');
+});
+
+$router->group(['prefix' => 'statuses', 'namespace' => 'App\Http\Controllers\Api\Status', 'middleware' => 'auth:sanctum'], function (Router $router) {
+    $router->get('/', 'ListController@statuses');
 });
 
 require 'admin_api.php';

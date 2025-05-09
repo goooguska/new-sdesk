@@ -35,9 +35,9 @@ defineProps({
 .form-input {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.5rem;
   width: 100%;
 }
+
 .form-input__label {
   font-size: 12px;
   color: var(--gray);
