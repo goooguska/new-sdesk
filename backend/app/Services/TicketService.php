@@ -78,6 +78,16 @@ class TicketService extends BaseService implements TicketServiceContract
         return $ticket->toArray();
     }
 
+    public function getRatioDoneAndRejectedTicketsPerWeek(): array
+    {
+        return $this->repository->getRatioDoneAndRejectedTicketsPerWeek();
+    }
+
+    public function getDoneCountTicketsPerWeek(): array
+    {
+        return $this->repository->getDoneCountTicketsPerWeek();
+    }
+
     /**
      * @throws StatusException
      */
@@ -93,5 +103,8 @@ class TicketService extends BaseService implements TicketServiceContract
         return $status;
     }
 
-
+    public function getCountTicketsPerWeekByCategory(): array
+    {
+        return $this->repository->getCountTicketsPerWeekByCategory();
+    }
 }

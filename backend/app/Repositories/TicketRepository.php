@@ -4,7 +4,9 @@ namespace App\Repositories;
 
 use App\Contracts\Repositories\TicketRepository as TicketRepositoryContract;
 use App\Models\Ticket;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 
 class TicketRepository extends BaseRepository implements TicketRepositoryContract
 {
@@ -30,5 +32,76 @@ class TicketRepository extends BaseRepository implements TicketRepositoryContrac
             ->with($this->defaultRelations)
             ->where('id', $id)
             ->first();
+    }
+
+    public function getRatioDoneAndRejectedTicketsPerWeek(): array
+    {
+        $startOfWeek = Carbon::now()->startOfWeek(Carbon::MONDAY);
+        $endOfWeek = Carbon::now()->endOfWeek(Carbon::SUNDAY);
+
+        $data = $this->model
+            ->newQuery()
+            ->selectRaw('
+                SUM(CASE WHEN statuses.code = \'done\' THEN 1 ELSE 0 END) as done,
+                SUM(CASE WHEN statuses.code = \'rejected\' THEN 1 ELSE 0 END) as rejected
+            ')
+            ->join('statuses', 'tickets.status_id', '=', 'statuses.id')
+            ->whereBetween('tickets.updated_at', [$startOfWeek, $endOfWeek])
+            ->whereIn('statuses.code', ['done', 'rejected'])
+            ->first();
+
+        $done = (int) ($data->done ?? 0);
+        $rejected = (int) ($data->rejected ?? 0);
+        $total = $done + $rejected;
+
+        return [
+            'done' => $done,
+            'rejected' => $rejected,
+            'done_percent' => $total > 0 ? round(($done / $total) * 100) : 0,
+            'rejected_percent' => $total > 0 ? round(($rejected / $total) * 100) : 0,
+            'total' => $total,
+        ];
+    }
+
+    public function getDoneCountTicketsPerWeek(): array
+    {
+        $startOfWeek = Carbon::now()->startOfWeek(Carbon::MONDAY);
+        $endOfWeek = Carbon::now()->endOfWeek(Carbon::SUNDAY);
+
+        $data = $this->model
+            ->newQuery()
+            ->selectRaw('TRIM(TO_CHAR(tickets.updated_at, \'Day\')) as day_name, COUNT(*) as count')
+            ->join('statuses', 'tickets.status_id', '=', 'statuses.id')
+            ->where("statuses.code", 'done')
+            ->whereBetween('tickets.updated_at', [$startOfWeek, $endOfWeek])
+            ->groupBy(DB::raw('TRIM(TO_CHAR(tickets.updated_at, \'Day\')), EXTRACT(DOW FROM tickets.updated_at)'))
+            ->orderBy(DB::raw('EXTRACT(DOW FROM tickets.updated_at)'))
+            ->pluck('count', 'day_name')
+            ->toArray();
+
+        return [
+            ...$data,
+            'total' => count($data),
+        ];
+    }
+
+    public function getCountTicketsPerWeekByCategory(): array
+    {
+        $startOfWeek = Carbon::now()->startOfWeek(Carbon::MONDAY);
+        $endOfWeek = Carbon::now()->endOfWeek(Carbon::SUNDAY);
+
+        $data = $this->model
+            ->newQuery()
+            ->join('categories', 'tickets.category_id', '=', 'categories.id')
+            ->whereBetween('tickets.created_at', [$startOfWeek, $endOfWeek])
+            ->select('categories.name as name', DB::raw('count(tickets.id) as ticket_count'))
+            ->groupBy('categories.name')
+            ->pluck('ticket_count', 'name')
+            ->toArray();
+
+        return [
+            ...$data,
+            'total' => count($data),
+        ];
     }
 }

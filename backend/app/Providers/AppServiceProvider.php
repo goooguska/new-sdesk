@@ -20,6 +20,7 @@ use App\Contracts\Services\Admin\UserService as AdminUserServiceContract;
 use App\Contracts\Services\AuthService as AuthServiceContract;
 use App\Contracts\Services\BaseService as BaseServiceContract;
 use App\Contracts\Services\SessionService as SessionServiceContract;
+use App\Contracts\Services\StatisticsService as StatisticsServiceContract;
 use App\Contracts\Services\StatusService as StatusServiceContract;
 use App\Contracts\Services\TicketService as TicketServiceContract;
 use App\Contracts\Services\UserService as UserServiceContract;
@@ -41,6 +42,7 @@ use App\Services\Admin\UserService as AdminUserService;
 use App\Services\AuthService;
 use App\Services\BaseService;
 use App\Services\SessionService;
+use App\Services\StatisticsService;
 use App\Services\StatusService;
 use App\Services\TicketService;
 use App\Services\UserService;
@@ -163,6 +165,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(
             UserServiceContract::class,
             UserService::class
+        );
+
+        $this->app->bind(
+            StatisticsServiceContract::class,
+            StatisticsService::class
         );
     }
 

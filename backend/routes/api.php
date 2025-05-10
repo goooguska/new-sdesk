@@ -24,4 +24,9 @@ $router->group(['prefix' => 'statuses', 'namespace' => 'App\Http\Controllers\Api
     $router->get('/', 'ListController@statuses');
 });
 
+$router->group(['prefix' => 'dashboard', 'namespace' => 'App\Http\Controllers\Api\Dashboard', 'middleware' => 'auth:sanctum'], function (Router $router) {
+    $router->get('/statistics', 'ListController@statistics');
+});
+
+
 require 'admin_api.php';

@@ -9,4 +9,10 @@ interface TicketService
     public function getAllForCurrentUser(): array;
 
     public function getTicketById(string $id): array;
+
+    public function getRatioDoneAndRejectedTicketsPerWeek(): array;
+
+    public function getDoneCountTicketsPerWeek(): array;
+
+    public function getCountTicketsPerWeekByCategory(): array;
 }
