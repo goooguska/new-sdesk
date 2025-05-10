@@ -9,6 +9,7 @@ use App\Contracts\Services\TicketService as TicketServiceContract;
 use App\Contracts\Services\UserService;
 use App\Enums\StatusEnum;
 use App\Events\Ticket\CreatedEvent;
+use App\Events\Ticket\UpdatedEvent;
 use App\Exceptions\StatusException;
 use App\Exceptions\TicketException;
 use App\Exceptions\UserException;
@@ -35,13 +36,31 @@ class TicketService extends BaseService implements TicketServiceContract
             $fields['status_id'] = $this->getWorkStatus()->id;
         }
 
-        $assigner = $this->userService->getById($fields['assigned_id']);
+        $assigner = $this->getUserById($fields['assigned_id']);
 
         $createdTicket = $this->create($fields);
 
         event(new CreatedEvent($assigner['email'], $createdTicket));
 
         return $createdTicket;
+    }
+
+    /**
+     * @throws TicketException
+     */
+    public function updateTicket(string $ticketId, array $fields): array
+    {
+        $updatedTicket = $this->repository->updateTicket($ticketId, $fields);
+
+        if ($updatedTicket === null) {
+            throw TicketException::failedUpdate($ticketId);
+        }
+
+        $creator = $this->getUserById($updatedTicket->creator_id);
+
+        event(new UpdatedEvent($creator['email'], $updatedTicket->toArray()));
+
+        return $updatedTicket->toArray();
     }
 
     /**
@@ -106,5 +125,10 @@ class TicketService extends BaseService implements TicketServiceContract
     public function getCountTicketsPerWeekByCategory(): array
     {
         return $this->repository->getCountTicketsPerWeekByCategory();
+    }
+
+    private function getUserById(string $userId): array
+    {
+        return $this->userService->getById($userId);
     }
 }

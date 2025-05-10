@@ -4,7 +4,9 @@ namespace App\Listeners;
 
 use App\Contracts\Mailer;
 use App\Events\Ticket\CreatedEvent;
+use App\Events\Ticket\UpdatedEvent;
 use App\Mail\Messages\CreateTicketMessage;
+use App\Mail\Messages\UpdateTicketMessage;
 use Illuminate\Events\Dispatcher;
 
 class EventSubscriber
@@ -19,6 +21,11 @@ class EventSubscriber
             CreatedEvent::class,
             [self::class, 'onCreatedEvent']
         );
+
+        $events->listen(
+            UpdatedEvent::class,
+            [self::class, 'onUpdatedEvent']
+        );
     }
 
     public function onCreatedEvent(CreatedEvent $event): void
@@ -28,6 +35,18 @@ class EventSubscriber
             new CreateTicketMessage(
                 $event->getTitle(),
                 $event->getDetailUrl($event->getTicketId())
+            )
+        );
+    }
+
+    public function onUpdatedEvent(UpdatedEvent $event): void
+    {
+        $this->mailer->sendToQueue(
+            $event->getEmail(),
+            new UpdateTicketMessage(
+                $event->getTitle(),
+                $event->getDetailUrl($event->getTicketId()),
+                $event->getStatus()
             )
         );
     }

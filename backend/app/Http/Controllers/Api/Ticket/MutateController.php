@@ -3,13 +3,13 @@
 namespace App\Http\Controllers\Api\Ticket;
 
 use App\Contracts\Services\TicketService;
+use App\Exceptions\TicketException;
 use App\Http\Requests\Ticket\CreateRequest;
 use App\Http\Requests\Ticket\UpdateRequest;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 
 class MutateController
@@ -36,7 +36,7 @@ class MutateController
     public function update(UpdateRequest $request, string $ticketId): ?JsonResponse
     {
         try {
-            $data = $this->ticketService->update(
+            $data = $this->ticketService->updateTicket(
                 $ticketId,
                 $request->all()
             );
@@ -44,7 +44,7 @@ class MutateController
             return new JsonResponse([
                 'data' => $data,
             ]);
-        } catch (NotFoundHttpException $e) {
+        } catch (TicketException $e) {
             Log::error($e->getMessage(), ['exception' => $e]);
 
             return new JsonResponse([

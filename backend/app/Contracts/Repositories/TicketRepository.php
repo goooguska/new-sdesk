@@ -11,6 +11,8 @@ interface TicketRepository
 
     public function getTicketById(string $id): ?Ticket;
 
+    public function updateTicket(string $id, array $fields): ?Ticket;
+
     public function getRatioDoneAndRejectedTicketsPerWeek(): array;
 
     public function getDoneCountTicketsPerWeek(): array;

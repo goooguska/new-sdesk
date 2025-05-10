@@ -11,10 +11,15 @@
                     </td>
                 </tr>
                 <tr>
-                    <td align="center">
-                        @component('mail::button', ['url' => $link])
+                    <td style="color: #047857;">
+                        <a href="{{ $link }}" style=" display: inline-block; margin-top: 20px; padding: 10px 20px; background-color: #047857;
+                           color: #ffffff;
+                           text-decoration: none;
+                           border-radius: 4px;
+                           font-weight: bold;
+                        ">
                             Перейти к заявке
-                        @endcomponent
+                        </a>
                     </td>
                 </tr>
             </table>

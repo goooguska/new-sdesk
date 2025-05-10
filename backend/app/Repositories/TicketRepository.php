@@ -4,9 +4,11 @@ namespace App\Repositories;
 
 use App\Contracts\Repositories\TicketRepository as TicketRepositoryContract;
 use App\Models\Ticket;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TicketRepository extends BaseRepository implements TicketRepositoryContract
 {
@@ -32,6 +34,28 @@ class TicketRepository extends BaseRepository implements TicketRepositoryContrac
             ->with($this->defaultRelations)
             ->where('id', $id)
             ->first();
+    }
+
+    /**
+     * @param string $id
+     * @param array  $fields
+     *
+     * @return Ticket|null
+     */
+    public function updateTicket(string $id, array $fields): ?Ticket
+    {
+        $model = $this->model->findOrFail($id);
+
+        $model->fill($fields);
+
+        if (! $model->isDirty() || $model->save()) {
+            /** @var Ticket|null $updated */
+            $updated = $this->model->with($this->defaultRelations)->find($id);
+
+            return $updated;
+        }
+
+        throw new \RuntimeException("Ошибка при обновлении записи.");
     }
 
     public function getRatioDoneAndRejectedTicketsPerWeek(): array

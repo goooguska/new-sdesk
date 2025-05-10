@@ -6,6 +6,8 @@ interface TicketService
 {
     public function createTicket(array $fields): array;
 
+    public function updateTicket(string $ticketId, array $fields): array;
+
     public function getAllForCurrentUser(): array;
 
     public function getTicketById(string $id): array;
