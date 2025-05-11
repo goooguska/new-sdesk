@@ -15,6 +15,8 @@ const confirm = () => {
     <p>
       Вы действительно хотите удалить
       <strong>«{{ item?.name || item?.title || `#${item.id}` }}»</strong>?
+      <!-- Костыльная проверка на пользователя :( -->
+      <span v-if="item.email">(Это повлечёт за собой удаление всех заявок пользователя)</span>
     </p>
     <div class="actions">
       <button class="btn btn-danger" @click="confirm">Удалить</button>

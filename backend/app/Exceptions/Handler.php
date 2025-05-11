@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Validation\ValidationException;
 use Throwable;
@@ -37,6 +38,13 @@ class Handler extends ExceptionHandler
                 'errors' => $e->errors(),
             ], 422);
         }
+
+        if (($e instanceof QueryException) && $e->getCode() === '23503') {
+            return response()->json([
+                'message' => 'Невозможно удалить запись, так как она связана с другими данными.',
+            ], 409);
+        }
+
 
         return parent::render($request, $e);
     }
