@@ -16,9 +16,7 @@ class SessionService implements SessionServiceContract
     public function login(User $user): User
     {
         try {
-            //TODO Браузер хранит куки, пока не решил как эту тему решить на клиенте
-            // Поэтому делаем logout
-            $this->logout();
+            $this->clearSession();
             auth()->login($user);
 
             return $user;
@@ -33,8 +31,7 @@ class SessionService implements SessionServiceContract
     {
         try {
             auth()->guard('web')->logout();
-            session()->invalidate();
-            session()->regenerateToken();
+            $this->clearSession();
         } catch (\Throwable $e) {
             Log::error($e->getMessage(), ['exception' => $e]);
         }
@@ -53,5 +50,12 @@ class SessionService implements SessionServiceContract
 
             throw UserException::notFound();
         }
+    }
+
+    private function clearSession(): void
+    {
+        session()->invalidate();
+        session()->regenerate();
+        session()->regenerateToken();
     }
 }
