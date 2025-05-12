@@ -2,8 +2,6 @@
 
 namespace App\Events\Ticket;
 
-use App\Events\Event;
-
 class CreatedEvent extends MutatedEvent
 {
     public function __construct(

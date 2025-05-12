@@ -34,9 +34,4 @@ class StatisticsService implements StatisticsServiceContract
             ],
         ];
     }
-
-    private function getStatuses()
-    {
-
-    }
 }
