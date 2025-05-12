@@ -53,7 +53,7 @@ const handleDelete = async () => {
     <BaseLoader />
   </div>
   <div v-else>
-    <SaveButton @click="openPopup('create', null)"> Создать новую сущность </SaveButton>
+    <SaveButton @click="openPopup('create', null)"> Создать новую запись </SaveButton>
     <table class="table">
       <thead class="table-head">
       <tr>

@@ -38,7 +38,7 @@ defineProps({
     </li>
     <li v-else class="list-item">Сотрудник:
       <span class="item-highlight">
-        {{ticket.data.assigned.name}} {{ticket.data.assigned.surname}}
+        {{ticket.data.creator.name}} {{ticket.data.creator.surname}}
       </span>
     </li>
     <li class="list-item">Дата подачи:

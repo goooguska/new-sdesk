@@ -3,7 +3,7 @@
 @section('body')
     <tr>
         <td style="padding: 25px;">
-            <table cellpadding="0" cellspacing="0" width="100%">
+            <table cellpadding="0" cellspacing="0" width="100%" style="text-align: center;">
                 <tr>
                     <td align="center"
                         style="color: #132747; font-family: Arial, sans-serif; font-size: 18px; font-weight: 700; line-height: 24px;">

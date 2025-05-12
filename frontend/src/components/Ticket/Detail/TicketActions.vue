@@ -134,5 +134,6 @@ const updateTicket = async () => {
 .buttons {
   display: flex;
   gap: 1rem;
+  justify-content: flex-end;
 }
 </style>

@@ -51,7 +51,7 @@ services:
             - app-network
 
     redis:
-        container_name: redis
+        container_name: redis-sdesk
         image: bitnami/redis:latest
         environment:
             ALLOW_EMPTY_PASSWORD: "yes"
