@@ -103,9 +103,13 @@ class TicketRepository extends BaseRepository implements TicketRepositoryContrac
             ->pluck('count', 'day_name')
             ->toArray();
 
+        $total = array_reduce($data, static function ($carry, $item) {
+            return $carry + $item;
+        });
+
         return [
             ...$data,
-            'total' => count($data),
+            'total' => $total,
         ];
     }
 
