@@ -26,6 +26,9 @@ export const useTicketStore = defineStore('ticketStore', () => {
         state.value.errors = {};
         try {
             const { data } = await axiosInstance.post('/tickets/create', formData);
+            if (!Array.isArray(state.value.tickets)) {
+                state.value.tickets = [];
+            }
             state.value.tickets.push(data);
             return true;
         } catch (error) {
